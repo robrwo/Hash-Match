@@ -4,6 +4,8 @@ v0.2.0
 
         - Internal code cleanup.
 
+        - Added support for matching undefined values.
+
 v0.1.1  2014-06-25
 
         - Added missing Changes file.

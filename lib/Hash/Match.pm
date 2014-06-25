@@ -182,10 +182,21 @@ sub _compile_match {
 
     } else {
 
-        return sub {
-            my $hash = $_[0];
-            ($hash->{$key} // '') eq $value;
-        };
+        if (defined $value) {
+
+            return sub {
+                my $hash = $_[0];
+                ($hash->{$key} // '') eq $value;
+            };
+
+        } else {
+
+            return sub {
+                my $hash = $_[0];
+                (exists $hash->{$key}) && !(defined $hash->{$key})
+            };
+
+        }
 
     }
 

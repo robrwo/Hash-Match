@@ -111,4 +111,12 @@ use_ok('Hash::Match');
     ok !$m->( { j => 1 } ), 'fail';
 }
 
+{
+    my $m = Hash::Match->new( rules => { k => '1', j => undef } );
+    isa_ok($m, 'Hash::Match');
+
+    ok $m->( { k => 1, j => undef } ),  'match';
+    ok !$m->( { k => 1 } ), 'fail';
+}
+
 done_testing;
