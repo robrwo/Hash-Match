@@ -8,7 +8,7 @@ use warnings;
 use version 0.77; our $VERSION = version->declare('v0.1.0');
 
 use Carp qw/ croak /;
-use List::MoreUtils qw/ all any natatime /;
+use List::MoreUtils qw/ natatime /;
 
 use namespace::autoclean;
 
@@ -62,7 +62,128 @@ C<$rules>, e.g.
 
 =head3 Rules
 
-TODO
+The rules can be a hash or array reference of key-value pairs, e.g.
+
+  {
+    k_1 => 'string',    # k_1 eq 'string'
+    k_2 => qr/xyz/,     # k_2 =~ qr/xyz/
+    k_3 => sub { ... }, # k_3 exists and sub->($hash) is true
+  }
+
+For a hash reference, all keys in the rule must exist in the hash and
+match the criteria specified by the rules' values.
+
+For an array reference, at least one key must exist and match the
+criteria specified in the rules.
+
+The following special keys allow you to use nested boolean operators:
+
+=over
+
+=item C<-not>
+
+  {
+    -not => $subrules,
+  }
+
+Negate the C<$subrules>.
+
+=item C<-and>
+
+  [
+    -and => \%subrules,
+  ]
+
+True if all of the C<%subrules> are true.
+
+=item C<-or>
+
+  {
+    -or => \@subrules,
+  }
+
+True if at least one of the C<@subrules> is true.
+
+=back
+
+=cut
+
+sub new {
+    my ($class, %args) = @_;
+
+    my $self = _compile_match( '-root' => $args{rules} );
+    bless $self, $class;
+}
+
+sub _compile_match {
+    my ( $key, $value ) = @_;
+
+    my $code;
+
+    if ( my $ref = ( ref $value ) ) {
+
+        if ( $ref eq 'Regexp' ) {
+
+            $code = sub {
+                my $hash = $_[0];
+                ($hash->{$key} // '') =~ $value;
+            };
+
+        } elsif ( $ref eq 'HASH' ) {
+
+            my @codes = map { _compile_match( $_, $value->{$_} ) }
+                ( keys %{$value} );
+
+            my $n  = ($key eq '-not') ? 'notall' : 'all';
+            my $fn = List::MoreUtils->can($n);
+
+            $code = sub {
+                my $hash = $_[0];
+                $fn->( sub { $_->($hash) }, @codes );
+            };
+
+        } elsif ( $ref eq 'ARRAY' ) {
+
+            my @codes;
+            my $it = natatime 2, @{$value};
+            while ( my ( $k, $v ) = $it->() ) {
+                push @codes, _compile_match( $k, $v );
+            }
+
+            my $n  = ($key eq '-not') ? 'none' : 'any';
+            my $fn = List::MoreUtils->can($n);
+
+            $code = sub {
+                my $hash = $_[0];
+                $fn->( sub { $_->($hash) }, @codes );
+            };
+
+        } elsif ( $ref eq 'CODE' ) {
+
+            $code = sub {
+                my $hash = $_[0];
+                (exists $hash->{$key}) ? $value : 0;
+            };
+
+        } else {
+
+            croak "Unsupported type: ${ref}";
+
+       }
+
+    } else {
+
+        $code = sub {
+            my $hash = $_[0];
+            ($hash->{$key} // '') eq $value;
+        };
+
+    }
+
+    return $code;
+}
+
+1;
 
 =head1 AUTHOR
 
@@ -114,73 +235,3 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 =cut
 
-sub new {
-    my ($class, %args) = @_;
-
-    my $self = _compile_match( '-root' => $args{rules} );
-    bless $self, $class;
-}
-
-sub _compile_match {
-    my ( $key, $value ) = @_;
-
-    my $code;
-
-    if ( my $ref = ( ref $value ) ) {
-
-        if ( $ref eq 'Regexp' ) {
-
-            $code = sub {
-                my $hash = $_[0];
-                ($hash->{$key} // '') =~ $value;
-            };
-
-        } elsif ( $ref eq 'HASH' ) {
-
-            my @codes = map { _compile_match( $_, $value->{$_} ) }
-                ( keys %{$value} );
-
-            $code = sub {
-                my $hash = $_[0];
-                all { $_->($hash) } @codes;
-            };
-
-        } elsif ( $ref eq 'ARRAY' ) {
-
-            my @codes;
-            my $it = natatime 2, @{$value};
-            while ( my ( $k, $v ) = $it->() ) {
-                push @codes, _compile_match( $k, $v );
-            }
-
-            $code = sub {
-                my $hash = $_[0];
-                any { $_->($hash) } @codes;
-            };
-
-        } elsif ( $ref eq 'CODE' ) {
-
-            $code = sub {
-                my $hash = $_[0];
-                (exists $hash->{$key}) ? $value : 0;
-            };
-
-        } else {
-
-            croak "Unsupported type: ${ref}";
-
-       }
-
-    } else {
-
-        $code = sub {
-            my $hash = $_[0];
-            ($hash->{$key} // '') eq $value;
-        };
-
-    }
-
-    return $code;
-}
-
-1;
