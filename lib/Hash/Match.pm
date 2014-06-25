@@ -89,6 +89,12 @@ The following special keys allow you to use nested boolean operators:
 
 Negate the C<$subrules>.
 
+If C<$subrules> is a hash reference, that it is true when not all of
+the rules match.
+
+If C<$subrules> is an array reference, then it is true when none of
+the rules match.
+
 =item C<-and>
 
   [
@@ -122,6 +128,8 @@ sub _compile_match {
     if ( my $key_ref = ( ref $key ) ) {
 
         if ( $key_ref eq 'Regexp' ) {
+
+
 
         } else {
 
