@@ -4,6 +4,8 @@ v0.1.1
 
         - Added missing Changes file.
 
+        - Fixed TODO section of the POD.
+
 v0.1.0  2014-06-25
 
         - First release on CPAN.

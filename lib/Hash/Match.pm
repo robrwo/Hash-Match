@@ -47,7 +47,8 @@ modules:
 
 =head1 DESCRIPTION
 
-TODO
+This module allows you to specify complex matching rules for the
+contents of a hash.
 
 =head1 METHODS
 

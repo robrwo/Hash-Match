@@ -20,7 +20,8 @@ SYNOPSIS
       $m->( { foo => 'bar' } ); # returns false
 
 DESCRIPTION
-    TODO
+    This module allows you to specify complex matching rules for the
+    contents of a hash.
 
 METHODS
   `new'
