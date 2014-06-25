@@ -105,6 +105,13 @@ METHODS
     to match if all keys that match the regular expression have
     corresponding values which match the `$rule'.
 
+    Note that you cannot use regular expressions as hash keys in Perl. So
+    the following *will not* work:
+
+      {
+        qr/xyz/ => $rule,
+      }
+
 AUTHOR
     Robert Rothenberg, `<rrwo at cpan.org>'
 

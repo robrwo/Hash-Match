@@ -5,7 +5,7 @@ use v5.10.0;
 use strict;
 use warnings;
 
-use version 0.77; our $VERSION = version->declare('v0.2.0');
+use version 0.77; our $VERSION = version->declare('v0.2.1');
 
 use Carp qw/ croak /;
 use List::MoreUtils qw/ natatime /;
@@ -143,6 +143,13 @@ You can also use
 
 to match if all keys that match the regular expression have
 corresponding values which match the C<$rule>.
+
+Note that you cannot use regular expressions as hash keys in Perl. So
+the following I<will not> work:
+
+  {
+    qr/xyz/ => $rule,
+  }
 
 =cut
 
