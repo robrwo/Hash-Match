@@ -38,7 +38,7 @@ METHODS
       {
         k_1 => 'string',    # k_1 eq 'string'
         k_2 => qr/xyz/,     # k_2 =~ qr/xyz/
-        k_3 => sub { ... }, # k_3 exists and sub->($hash) is true
+        k_3 => sub { ... }, # k_3 exists and sub->($hash->{k_3}) is true
       }
 
     For a hash reference, all keys in the rule must exist in the hash and
