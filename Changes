@@ -8,6 +8,10 @@ v0.2.0
 
         - Added more POD.
 
+        - Added more error checking.
+
+        - Added support for using regular expressions as keys.
+
 v0.1.1  2014-06-25
 
         - Added missing Changes file.
