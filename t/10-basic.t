@@ -134,6 +134,16 @@ use_ok('Hash::Match');
 }
 
 {
+    my $m = Hash::Match->new( rules => { k => sub { $_[0] <= 2 } } );
+    isa_ok($m, 'Hash::Match');
+
+    ok $m->( { k => 1 } ),  'match';
+    ok $m->( { k => 2 } ),  'match';
+    ok !$m->( { k => 3 } ), 'fail';
+    ok !$m->( { j => 1 } ), 'fail';
+}
+
+{
     my $m = Hash::Match->new( rules => { k => '1', j => undef } );
     isa_ok($m, 'Hash::Match');
 
