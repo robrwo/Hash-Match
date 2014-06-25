@@ -121,7 +121,13 @@ sub _compile_match {
 
     if ( my $key_ref = ( ref $key ) ) {
 
-        croak "Unsupported feature";
+        if ( $key_ref eq 'Regexp' ) {
+
+        } else {
+
+            croak "Unsupported key type: '${key_ref}'";
+
+        }
 
     } elsif ( my $match_ref = ( ref $value ) ) {
 
