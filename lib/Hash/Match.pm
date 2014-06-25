@@ -5,7 +5,7 @@ use v5.10.0;
 use strict;
 use warnings;
 
-use version 0.77; our $VERSION = version->declare('v0.1.1');
+use version 0.77; our $VERSION = version->declare('v0.2.0');
 
 use Carp qw/ croak /;
 use List::MoreUtils qw/ natatime /;
@@ -112,33 +112,31 @@ True if at least one of the C<@subrules> is true.
 sub new {
     my ($class, %args) = @_;
 
-    my $self = _compile_match( '-root' => $args{rules} );
+    my $self = _compile_match( '-root' => $args{rules}, $class );
     bless $self, $class;
 }
 
 sub _compile_match {
-    my ( $key, $value ) = @_;
-
-    my $code;
+    my ( $key, $value, $ctx ) = @_;
 
     if ( my $ref = ( ref $value ) ) {
 
         if ( $ref eq 'Regexp' ) {
 
-            $code = sub {
+            return sub {
                 my $hash = $_[0];
                 ($hash->{$key} // '') =~ $value;
             };
 
         } elsif ( $ref eq 'HASH' ) {
 
-            my @codes = map { _compile_match( $_, $value->{$_} ) }
+            my @codes = map { _compile_match( $_, $value->{$_}, $ref ) }
                 ( keys %{$value} );
 
             my $n  = ($key eq '-not') ? 'notall' : 'all';
             my $fn = List::MoreUtils->can($n);
 
-            $code = sub {
+            return sub {
                 my $hash = $_[0];
                 $fn->( sub { $_->($hash) }, @codes );
             };
@@ -148,20 +146,20 @@ sub _compile_match {
             my @codes;
             my $it = natatime 2, @{$value};
             while ( my ( $k, $v ) = $it->() ) {
-                push @codes, _compile_match( $k, $v );
+                push @codes, _compile_match( $k, $v, $ref );
             }
 
             my $n  = ($key eq '-not') ? 'none' : 'any';
             my $fn = List::MoreUtils->can($n);
 
-            $code = sub {
+            return sub {
                 my $hash = $_[0];
                 $fn->( sub { $_->($hash) }, @codes );
             };
 
         } elsif ( $ref eq 'CODE' ) {
 
-            $code = sub {
+            return sub {
                 my $hash = $_[0];
                 (exists $hash->{$key}) ? $value : 0;
             };
@@ -174,14 +172,14 @@ sub _compile_match {
 
     } else {
 
-        $code = sub {
+        return sub {
             my $hash = $_[0];
             ($hash->{$key} // '') eq $value;
         };
 
     }
 
-    return $code;
+    croak "Unhandled condition";
 }
 
 1;
