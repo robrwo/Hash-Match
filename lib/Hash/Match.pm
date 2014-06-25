@@ -218,10 +218,10 @@ sub _compile_rule {
 
         my $match_ref = ref $value;
 
-            if ( $match_ref eq 'HASH' ) {
+        if ( $match_ref eq 'HASH' ) {
 
             my @codes = map { _compile_rule( $_, $value->{$_}, $match_ref ) }
-                ( keys %{$value} );
+            ( keys %{$value} );
 
             my $n  = ($key eq '-not') ? 'notall' : ($key eq '-or') ? 'any' : 'all';
             my $fn = List::MoreUtils->can($n);
@@ -261,7 +261,7 @@ sub _compile_rule {
 
             croak "Unsupported type: ${match_ref}";
 
-       }
+        }
 
     }
 
