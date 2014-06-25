@@ -49,7 +49,18 @@ modules:
 
 TODO
 
-=head2 Rules
+=head1 METHODS
+
+=head2 C<new>
+
+  my $m = Hash::Match->new( rules => $rules );
+
+Returns a function that matches a hash reference against the
+C<$rules>, e.g.
+
+  if ( $m->( \%hash ) ) { ... }
+
+=head3 Rules
 
 TODO
 
