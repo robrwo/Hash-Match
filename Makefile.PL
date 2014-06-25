@@ -14,8 +14,8 @@ tests_recursive('t');
 resources (
    homepage   => 'http://rrwo.tumblr.com',
    license    => 'http://www.perlfoundation.org/artistic_license_2_0',
-#   repository => 'git://github.com/robrwo/Test-HTML-Spelling.git',
-#   bugtracker => 'https://github.com/robrwo/Test-HTML-Spelling/issues',
+   repository => 'git://github.com/robrwo/Hash-Match.git',
+   bugtracker => 'https://github.com/robrwo/Hash-Match/issues',
 );
 
 configure_requires ();
