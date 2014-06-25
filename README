@@ -22,7 +22,53 @@ SYNOPSIS
 DESCRIPTION
     TODO
 
-  Rules
+METHODS
+  `new'
+      my $m = Hash::Match->new( rules => $rules );
+
+    Returns a function that matches a hash reference against the `$rules',
+    e.g.
+
+      if ( $m->( \%hash ) ) { ... }
+
+    Rules
+    The rules can be a hash or array reference of key-value pairs, e.g.
+
+      {
+        k_1 => 'string',    # k_1 eq 'string'
+        k_2 => qr/xyz/,     # k_2 =~ qr/xyz/
+        k_3 => sub { ... }, # k_3 exists and sub->($hash) is true
+      }
+
+    For a hash reference, all keys in the rule must exist in the hash and
+    match the criteria specified by the rules' values.
+
+    For an array reference, at least one key must exist and match the
+    criteria specified in the rules.
+
+    The following special keys allow you to use nested boolean operators:
+
+    `-not'
+          {
+            -not => $subrules,
+          }
+
+        Negate the `$subrules'.
+
+    `-and'
+          [
+            -and => \%subrules,
+          ]
+
+        True if all of the `%subrules' are true.
+
+    `-or'
+          {
+            -or => \@subrules,
+          }
+
+        True if at least one of the `@subrules' is true.
+
 AUTHOR
     Robert Rothenberg, `<rrwo at cpan.org>'
 
