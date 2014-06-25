@@ -119,18 +119,22 @@ sub new {
 sub _compile_match {
     my ( $key, $value, $ctx ) = @_;
 
-    if ( my $ref = ( ref $value ) ) {
+    if ( my $key_ref = ( ref $key ) ) {
 
-        if ( $ref eq 'Regexp' ) {
+        croak "Unsupported feature";
+
+    } elsif ( my $match_ref = ( ref $value ) ) {
+
+        if ( $match_ref eq 'Regexp' ) {
 
             return sub {
                 my $hash = $_[0];
                 ($hash->{$key} // '') =~ $value;
             };
 
-        } elsif ( $ref eq 'HASH' ) {
+        } elsif ( $match_ref eq 'HASH' ) {
 
-            my @codes = map { _compile_match( $_, $value->{$_}, $ref ) }
+            my @codes = map { _compile_match( $_, $value->{$_}, $match_ref ) }
                 ( keys %{$value} );
 
             my $n  = ($key eq '-not') ? 'notall' : 'all';
@@ -141,12 +145,12 @@ sub _compile_match {
                 $fn->( sub { $_->($hash) }, @codes );
             };
 
-        } elsif ( $ref eq 'ARRAY' ) {
+        } elsif ( $match_ref eq 'ARRAY' ) {
 
             my @codes;
             my $it = natatime 2, @{$value};
             while ( my ( $k, $v ) = $it->() ) {
-                push @codes, _compile_match( $k, $v, $ref );
+                push @codes, _compile_match( $k, $v, $match_ref );
             }
 
             my $n  = ($key eq '-not') ? 'none' : 'any';
@@ -157,7 +161,7 @@ sub _compile_match {
                 $fn->( sub { $_->($hash) }, @codes );
             };
 
-        } elsif ( $ref eq 'CODE' ) {
+        } elsif ( $match_ref eq 'CODE' ) {
 
             return sub {
                 my $hash = $_[0];
@@ -166,7 +170,7 @@ sub _compile_match {
 
         } else {
 
-            croak "Unsupported type: ${ref}";
+            croak "Unsupported type: ${match_ref}";
 
        }
 
