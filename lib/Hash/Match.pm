@@ -214,18 +214,11 @@ sub _compile_rule {
 
         }
 
-    } elsif ( my $match_ref = ( ref $value ) ) {
+    } else {
 
-        if ( $match_ref =~ /^(?:Regexp|CODE)/ ) {
+        my $match_ref = ref $value;
 
-            my $match = _compile_match($value);
-
-            return sub {
-                my $hash = $_[0];
-                (exists $hash->{$key}) ? $match->($hash->{$key}) : 0;
-            };
-
-        } elsif ( $match_ref eq 'HASH' ) {
+            if ( $match_ref eq 'HASH' ) {
 
             my @codes = map { _compile_rule( $_, $value->{$_}, $match_ref ) }
                 ( keys %{$value} );
@@ -255,21 +248,20 @@ sub _compile_rule {
                 $fn->( sub { $_->($hash) }, @codes );
             };
 
+        } elsif ( $match_ref =~ /^(?:Regexp|CODE|)$/ ) {
+
+            my $match = _compile_match($value);
+
+            return sub {
+                my $hash = $_[0];
+                (exists $hash->{$key}) ? $match->($hash->{$key}) : 0;
+            };
+
         } else {
 
             croak "Unsupported type: ${match_ref}";
 
        }
-
-    } else {
-
-        my $match = _compile_match($value);
-
-        return sub {
-            my $hash = $_[0];
-            (exists $hash->{$key}) && $match->($hash->{$key});
-        };
-
 
     }
 
