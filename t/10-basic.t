@@ -162,6 +162,26 @@ use_ok('Hash::Match');
 }
 
 {
+    my $m = Hash::Match->new( rules => [ sub { 1 } => 1, ] );
+    isa_ok($m, 'Hash::Match');
+
+    ok $m->( { k_a => 1, k_b => 2 } ),  'match';
+    ok !$m->( { k_a => 3, k_b => 2 } ), 'fail';
+    ok $m->( { j_a => 1 } ), 'match';
+
+}
+
+{
+    my $m = Hash::Match->new( rules => [ sub { my $k = shift; $k =~ /k/; } => 1, ] );
+    isa_ok($m, 'Hash::Match');
+
+    ok $m->( { k_a => 1, k_b => 2 } ),  'match';
+    ok !$m->( { k_a => 3, k_b => 2 } ), 'fail';
+    ok !$m->( { j_a => 1, j_b => 1 } ), 'fail';
+
+}
+
+{
     my $m = Hash::Match->new( rules => { -or => [ qr/^k/ => 1, ] } );
     isa_ok($m, 'Hash::Match');
 
