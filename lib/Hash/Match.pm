@@ -151,6 +151,17 @@ the following I<will not> work:
     qr/xyz/ => $rule,
   }
 
+=head4 Functions as Keys
+
+You can use functions to match keys. For example,
+
+  -or => [
+    sub { $_[0] > 10 } => $rule,
+  ]
+
+These are subject to the same limitations as regular expression
+matches.
+
 =cut
 
 sub new {
@@ -206,6 +217,19 @@ sub _compile_rule {
                 my $hash = $_[0];
                 $fn->( sub { $match->( $hash->{$_} ) },
                        grep { $_ =~ $key } (keys %{$hash}) );
+            };
+
+        } elsif ( $key_ref eq 'CODE' ) {
+
+            my $n  = ($ctx eq 'HASH') ? 'all' : 'any';
+            my $fn = List::MoreUtils->can($n);
+
+            my $match = _compile_match($value);
+
+            return sub {
+                my $hash = $_[0];
+                $fn->( sub { $match->( $hash->{$_} ) },
+                       grep { $key->($_) } (keys %{$hash}) );
             };
 
         } else {
