@@ -112,6 +112,15 @@ METHODS
         qr/xyz/ => $rule,
       }
 
+    Functions as Keys
+    You can use functions to match keys. For example,
+
+      -or => [
+        sub { $_[0] > 10 } => $rule,
+      ]
+
+    These are subject to the same limitations as regular expression matches.
+
 AUTHOR
     Robert Rothenberg, `<rrwo at cpan.org>'
 
