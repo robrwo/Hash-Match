@@ -5,7 +5,7 @@ use v5.10.0;
 use strict;
 use warnings;
 
-use version 0.77; our $VERSION = version->declare('v0.3.1');
+use version 0.77; our $VERSION = version->declare('v0.4.0');
 
 use Carp qw/ croak /;
 use List::MoreUtils qw/ natatime /;
@@ -151,6 +151,17 @@ the following I<will not> work:
     qr/xyz/ => $rule,
   }
 
+=head4 Functions as Keys
+
+You can use functions to match keys. For example,
+
+  -or => [
+    sub { $_[0] > 10 } => $rule,
+  ]
+
+These are subject to the same limitations as regular expression
+matches.
+
 =cut
 
 sub new {
@@ -175,7 +186,6 @@ sub _compile_match {
     if ( my $match_ref = ( ref $value ) ) {
 
         return sub { ($_[0] // '') =~ $value } if ( $match_ref eq 'Regexp' );
-
 
         return sub { $value->($_[0]) } if ( $match_ref eq 'CODE' );
 
@@ -206,6 +216,19 @@ sub _compile_rule {
                 my $hash = $_[0];
                 $fn->( sub { $match->( $hash->{$_} ) },
                        grep { $_ =~ $key } (keys %{$hash}) );
+            };
+
+        } elsif ( $key_ref eq 'CODE' ) {
+
+            my $n  = ($ctx eq 'HASH') ? 'all' : 'any';
+            my $fn = List::MoreUtils->can($n);
+
+            my $match = _compile_match($value);
+
+            return sub {
+                my $hash = $_[0];
+                $fn->( sub { $match->( $hash->{$_} ) },
+                       grep { $key->($_) } (keys %{$hash}) );
             };
 
         } else {

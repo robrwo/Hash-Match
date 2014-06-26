@@ -1,5 +1,9 @@
 Revision history for Hash::Match
 
+v0.4.0  2014-06-26
+
+        - Added the ability to use functions for key matching.
+
 v0.3.1  2014-06-26
 
         - Fixed bug with regex key matching.
