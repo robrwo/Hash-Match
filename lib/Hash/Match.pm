@@ -187,7 +187,6 @@ sub _compile_match {
 
         return sub { ($_[0] // '') =~ $value } if ( $match_ref eq 'Regexp' );
 
-
         return sub { $value->($_[0]) } if ( $match_ref eq 'CODE' );
 
         croak "Unsupported type: ${match_ref}";
