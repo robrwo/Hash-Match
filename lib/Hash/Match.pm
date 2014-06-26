@@ -205,7 +205,7 @@ sub _compile_rule {
             return sub {
                 my $hash = $_[0];
                 $fn->( sub { $match->( $hash->{$_} ) },
-                       grep { $key_ref } (keys %{$hash}) );
+                       grep { $_ =~ $key } (keys %{$hash}) );
             };
 
         } else {

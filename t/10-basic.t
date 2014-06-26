@@ -157,6 +157,8 @@ use_ok('Hash::Match');
 
     ok $m->( { k_a => 1, k_b => 2 } ),  'match';
     ok !$m->( { k_a => 3, k_b => 2 } ), 'fail';
+    ok !$m->( { j_a => 1, j_b => 1 } ), 'fail';
+
 }
 
 {
