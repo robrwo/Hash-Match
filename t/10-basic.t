@@ -1,4 +1,5 @@
 use Test::More 0.98;
+use Test::Exception;
 use if $ENV{RELEASE_TESTING}, 'Test::Warnings';
 
 use_ok('Hash::Match');
@@ -329,5 +330,24 @@ subtest "regex key match (-all)" => sub {
     ok !$m->( { k_a => 3, k_b => 2 } ), 'fail';
 };
 
+subtest "exceptions" => sub {
+
+    throws_ok sub {
+	my $m = Hash::Match->new( rules => { badkey => { k => '1' } } );
+    }, qr/Unsupported key: 'badkey'/, "unrecognized key";
+
+    my $foo = bless {}, 'Foo';
+
+    throws_ok sub {
+	my $m = Hash::Match->new( rules => { k => $foo } );
+    }, qr/Unsupported type: 'Foo'/, "unrecognized key";
+
+
+    throws_ok sub {
+	my $m = Hash::Match->new( rules => [ qr/k/ => $foo ] );
+    }, qr/Unsupported type: 'Foo'/, "unrecognized key";
+
+
+};
 
 done_testing;

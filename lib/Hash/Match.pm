@@ -189,7 +189,7 @@ sub _compile_match {
 
         return sub { $value->($_[0]) } if ( $match_ref eq 'CODE' );
 
-        croak "Unsupported type: ${match_ref}";
+        croak "Unsupported type: '${match_ref}'";
 
     } else {
 
@@ -291,7 +291,7 @@ sub _compile_rule {
 
         } else {
 
-            croak "Unsupported type: ${match_ref}";
+            croak "Unsupported type: '${match_ref}'";
 
         }
 
