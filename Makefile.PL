@@ -6,7 +6,7 @@ name     'Hash-Match';
 all_from 'lib/Hash/Match.pm';
 license  'artistic2';
 
-perl_version 5.010001;
+perl_version 5.010;
 
 tests_recursive('t');
 # tests_recursive('xt');
@@ -21,7 +21,7 @@ resources (
 configure_requires ();
 
 build_requires (
-   'Test::More' => 0,
+   'Test::More' => 0.98, # for subtests
 );
 
 requires (
