@@ -1,6 +1,6 @@
 package Hash::Match;
 
-use v5.10.1;
+use v5.10.0;
 
 use strict;
 use warnings;
@@ -204,8 +204,8 @@ my %KEY2FN = (
     '-all'	=> List::MoreUtils->can('all'),
     '-and'	=> List::MoreUtils->can('all'),
     '-any'	=> List::MoreUtils->can('any'),
-    '-not-all'	=> List::MoreUtils->can('notall'),
-    '-not-any'	=> List::MoreUtils->can('none'),
+    '-notall'	=> List::MoreUtils->can('notall'),
+    '-notany'	=> List::MoreUtils->can('none'),
     '-or'	=> List::MoreUtils->can('any'),
 );
 
@@ -217,7 +217,7 @@ sub _key2fn {
 
     if ($key eq '-not') {
 	$ctx //= '';
-	$key = ($ctx eq 'HASH') ? '-not-all' : '-not-any';
+	$key = ($ctx eq 'HASH') ? '-notall' : '-notany';
     }
 
     $KEY2FN{$key} or croak "Unsupported key: '${key}'";
