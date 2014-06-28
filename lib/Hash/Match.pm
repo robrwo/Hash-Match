@@ -5,7 +5,7 @@ use v5.10.0;
 use strict;
 use warnings;
 
-use version 0.77; our $VERSION = version->declare('v0.4.0');
+use version 0.77; our $VERSION = version->declare('v0.5.0');
 
 use Carp qw/ croak /;
 use List::MoreUtils qw/ natatime /;
@@ -40,10 +40,16 @@ modules:
   my $m = Hash::Match->new( rules => { key => qr/ba/ } );
 
   $m->( { key => 'foo' } ); # returns false
-
   $m->( { key => 'bar' } ); # returns true
-
   $m->( { foo => 'bar' } ); # returns false
+
+  my $n = Hash::Match->new( rules => {
+     -any => [ key => qr/ba/,
+               key => qr/fo/,
+             ],
+  } )
+
+  $n->( { key => 'foo' } ); # returns true
 
 =head1 DESCRIPTION
 
@@ -74,61 +80,82 @@ The rules can be a hash or array reference of key-value pairs, e.g.
 For a hash reference, all keys in the rule must exist in the hash and
 match the criteria specified by the rules' values.
 
-For an array reference, at least one key must exist and match the
+For an array reference, some (any) key must exist and match the
 criteria specified in the rules.
 
-=head4 Boolean Operators
-
-The following special keys allow you to use nested boolean operators:
+You can specify more complex rules using special key names:
 
 =over
 
-=item C<-not>
+=item C<-all>
 
   {
-    -not => $subrules,
+    -all => $rules,
   }
 
-Negate the C<$subrules>.
+All of the C<$rules> must match, where C<$rules> is an array or hash
+reference.
 
-If C<$subrules> is a hash reference, that it is true when not all of
-the rules match.
+=item C<-any>
 
-If C<$subrules> is an array reference, then it is true when none of
-the rules match.
+  {
+    -any => $rules,
+  }
+
+Any of the C<$rules> must match.
+
+=item C<-notall>
+
+  {
+    -notall => $rules,
+  }
+
+Not all of the C<$rules> can match (i.e., at least one rule must
+fail).
+
+=item C<-notany>
+
+  {
+    -any => $rules,
+  }
+
+None of the C<$rules> can match.
 
 =item C<-and>
 
-  [
-    -and => \%subrules,
-  ]
-
-True if all of the C<%subrules> are true.
-
-You can also use
-
-  {
-    -and => \@subrules,
-  }
-
-which is useful for cases where the keys of C<@subrules> are not
-strings, e.g. regular expressions.
+This is a (deprecated) synonym for C<-all>.
 
 =item C<-or>
 
-  {
-    -or => \@subrules,
-  }
-
-True if at least one of the C<@subrules> is true.
+This is a (deprecated) synonym for C<-any>.
 
 =back
 
-=head4 Regular Expressions for Keys
+Note that rules can be specified arbitrarily deep, e.g.
+
+  {
+    -any => [
+       -all => { ... },
+       -all => { ... },
+    ],
+  }
+
+or
+
+  {
+    -all => [
+       -any => [ ... ],
+       -any => [ ... ],
+    ],
+  }
+
+The values for special keys can be either a hash or array
+reference. But note that hash references only allow strings as keys,
+and that keys must be unique.
 
 You can use regular expressions for matching keys. For example,
 
-  -or => [
+  -any => [
     qr/xyz/ => $rule,
   ]
 
@@ -144,23 +171,11 @@ You can also use
 to match if all keys that match the regular expression have
 corresponding values which match the C<$rule>.
 
-Note that you cannot use regular expressions as hash keys in Perl. So
-the following I<will not> work:
-
-  {
-    qr/xyz/ => $rule,
-  }
-
-=head4 Functions as Keys
-
-You can use functions to match keys. For example,
+You can also use functions to match keys. For example,
 
   -or => [
     sub { $_[0] > 10 } => $rule,
   ]
-
-These are subject to the same limitations as regular expression
-matches.
 
 =cut
 
@@ -169,7 +184,7 @@ sub new {
 
     if (my $rules = $args{rules}) {
 
-        my $root = ((ref $rules) eq 'HASH') ? '-and' : '-or';
+        my $root = ((ref $rules) eq 'HASH') ? '-all' : '-any';
         my $self = _compile_rule( $root => $args{rules}, $class );
         bless $self, $class;
 
@@ -189,7 +204,7 @@ sub _compile_match {
 
         return sub { $value->($_[0]) } if ( $match_ref eq 'CODE' );
 
-        croak "Unsupported type: ${match_ref}";
+        croak "Unsupported type: '${match_ref}'";
 
     } else {
 
@@ -200,6 +215,29 @@ sub _compile_match {
     }
 }
 
+my %KEY2FN = (
+    '-all'	=> List::MoreUtils->can('all'),
+    '-and'	=> List::MoreUtils->can('all'),
+    '-any'	=> List::MoreUtils->can('any'),
+    '-notall'	=> List::MoreUtils->can('notall'),
+    '-notany'	=> List::MoreUtils->can('none'),
+    '-or'	=> List::MoreUtils->can('any'),
+);
+
+sub _key2fn {
+    my ($key, $ctx) = @_;
+
+    # TODO: eventually add a warning message about -not being
+    # deprecated.
+
+    if ($key eq '-not') {
+	$ctx //= '';
+	$key = ($ctx eq 'HASH') ? '-notall' : '-notany';
+    }
+
+    $KEY2FN{$key} or croak "Unsupported key: '${key}'";
+}
+
 sub _compile_rule {
     my ( $key, $value, $ctx ) = @_;
 
@@ -207,10 +245,9 @@ sub _compile_rule {
 
         if ( $key_ref eq 'Regexp' ) {
 
-            my $n  = ($ctx eq 'HASH') ? 'all' : 'any';
-            my $fn = List::MoreUtils->can($n);
-
             my $match = _compile_match($value);
+
+            my $fn = _key2fn($ctx);
 
             return sub {
                 my $hash = $_[0];
@@ -220,10 +257,9 @@ sub _compile_rule {
 
         } elsif ( $key_ref eq 'CODE' ) {
 
-            my $n  = ($ctx eq 'HASH') ? 'all' : 'any';
-            my $fn = List::MoreUtils->can($n);
-
             my $match = _compile_match($value);
+
+            my $fn = _key2fn($ctx);
 
             return sub {
                 my $hash = $_[0];
@@ -241,30 +277,18 @@ sub _compile_rule {
 
         my $match_ref = ref $value;
 
-        if ( $match_ref eq 'HASH' ) {
+	if ( $match_ref =~ /^(?:ARRAY|HASH)$/ ) {
 
-            my @codes = map { _compile_rule( $_, $value->{$_}, $match_ref ) }
-            ( keys %{$value} );
-
-            my $n  = ($key eq '-not') ? 'notall' : ($key eq '-or') ? 'any' : 'all';
-            my $fn = List::MoreUtils->can($n);
-
-            return sub {
-                my $hash = $_[0];
-                $fn->( sub { $_->($hash) }, @codes );
-            };
-
-        } elsif ( $match_ref eq 'ARRAY' ) {
+            my $it = ( $match_ref eq 'ARRAY' )
+		? natatime 2, @{$value}
+	        : sub { each %{$value} };
 
             my @codes;
-            my $ref = ($key eq '-and') ? 'HASH' : $match_ref;
-            my $it = natatime 2, @{$value};
             while ( my ( $k, $v ) = $it->() ) {
-                push @codes, _compile_rule( $k, $v, $ref );
+                push @codes, _compile_rule( $k, $v, $key );
             }
 
-            my $n  = ($key eq '-not') ? 'none' : ($key eq '-and') ? 'all' : 'any';
-            my $fn = List::MoreUtils->can($n);
+            my $fn = _key2fn($key, $match_ref);
 
             return sub {
                 my $hash = $_[0];
@@ -282,7 +306,7 @@ sub _compile_rule {
 
         } else {
 
-            croak "Unsupported type: ${match_ref}";
+            croak "Unsupported type: '${match_ref}'";
 
         }
 

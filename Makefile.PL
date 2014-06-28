@@ -21,7 +21,7 @@ resources (
 configure_requires ();
 
 build_requires (
-   'Test::More' => 0,
+   'Test::More' => 0.98, # for subtests
 );
 
 requires (
