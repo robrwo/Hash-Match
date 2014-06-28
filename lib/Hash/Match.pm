@@ -1,11 +1,11 @@
 package Hash::Match;
 
-use v5.10.0;
+use v5.10.1;
 
 use strict;
 use warnings;
 
-use version 0.77; our $VERSION = version->declare('v0.4.0');
+use version 0.77; our $VERSION = version->declare('v0.5.0');
 
 use Carp qw/ croak /;
 use List::MoreUtils qw/ natatime /;
@@ -200,6 +200,29 @@ sub _compile_match {
     }
 }
 
+my %KEY2FN = (
+    '-all'	=> List::MoreUtils->can('all'),
+    '-and'	=> List::MoreUtils->can('all'),
+    '-any'	=> List::MoreUtils->can('any'),
+    '-not-all'	=> List::MoreUtils->can('notall'),
+    '-not-any'	=> List::MoreUtils->can('none'),
+    '-or'	=> List::MoreUtils->can('any'),
+);
+
+sub _key2fn {
+    my ($key, $ctx) = @_;
+
+    # TODO: eventually add a warning message about -not being
+    # deprecated.
+
+    if ($key eq '-not') {
+	$ctx //= '';
+	$key = ($ctx eq 'HASH') ? '-not-all' : '-not-any';
+    }
+
+    $KEY2FN{$key} or croak "Unsupported key: '${key}'";
+}
+
 sub _compile_rule {
     my ( $key, $value, $ctx ) = @_;
 
@@ -207,10 +230,9 @@ sub _compile_rule {
 
         if ( $key_ref eq 'Regexp' ) {
 
-            my $n  = ($ctx eq 'HASH') ? 'all' : 'any';
-            my $fn = List::MoreUtils->can($n);
-
             my $match = _compile_match($value);
+
+            my $fn = _key2fn($ctx);
 
             return sub {
                 my $hash = $_[0];
@@ -220,10 +242,9 @@ sub _compile_rule {
 
         } elsif ( $key_ref eq 'CODE' ) {
 
-            my $n  = ($ctx eq 'HASH') ? 'all' : 'any';
-            my $fn = List::MoreUtils->can($n);
-
             my $match = _compile_match($value);
+
+            my $fn = _key2fn($ctx);
 
             return sub {
                 my $hash = $_[0];
@@ -241,30 +262,18 @@ sub _compile_rule {
 
         my $match_ref = ref $value;
 
-        if ( $match_ref eq 'HASH' ) {
+	if ( $match_ref =~ /^(?:ARRAY|HASH)$/ ) {
 
-            my @codes = map { _compile_rule( $_, $value->{$_}, $match_ref ) }
-            ( keys %{$value} );
-
-            my $n  = ($key eq '-not') ? 'notall' : ($key eq '-or') ? 'any' : 'all';
-            my $fn = List::MoreUtils->can($n);
-
-            return sub {
-                my $hash = $_[0];
-                $fn->( sub { $_->($hash) }, @codes );
-            };
-
-        } elsif ( $match_ref eq 'ARRAY' ) {
+            my $it = ( $match_ref eq 'ARRAY' )
+		? natatime 2, @{$value}
+	        : sub { each %{$value} };
 
             my @codes;
-            my $ref = ($key eq '-and') ? 'HASH' : $match_ref;
-            my $it = natatime 2, @{$value};
             while ( my ( $k, $v ) = $it->() ) {
-                push @codes, _compile_rule( $k, $v, $ref );
+                push @codes, _compile_rule( $k, $v, $key );
             }
 
-            my $n  = ($key eq '-not') ? 'none' : ($key eq '-and') ? 'all' : 'any';
-            my $fn = List::MoreUtils->can($n);
+            my $fn = _key2fn($key, $match_ref);
 
             return sub {
                 my $hash = $_[0];

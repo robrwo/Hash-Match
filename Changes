@@ -1,5 +1,11 @@
 Revision history for Hash::Match
 
+v0.5.0
+
+	- The "-and", "-or" and "-not" keys are deprecated.
+
+	- Further code simplication.
+
 v0.4.0  2014-06-26
 
         - Added the ability to use functions for key matching.
