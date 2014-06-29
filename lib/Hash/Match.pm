@@ -334,6 +334,14 @@ sub _compile_rule {
 
 Robert Rothenberg, C<< <rrwo at cpan.org> >>
 
+=head1 ACKNOWLEDGEMENTS
+
+=over
+
+=item Foxtons, Ltd.
+
+=back
+
 =head1 LICENSE AND COPYRIGHT
 
 Copyright 2014 Robert Rothenberg.
