@@ -21,7 +21,8 @@ resources (
 configure_requires ();
 
 build_requires (
-   'Test::More' => 0.98, # for subtests
+    'Test::More'      => 0.98, # for subtests
+    'Test::Exception' => 0,
 );
 
 requires (
@@ -32,7 +33,8 @@ requires (
 );
 
 test_requires (
-    'Test::More'           => 0,
+    'Test::More'      => 0.98,
+    'Test::Exception' => 0,
 );
 
 install_as_cpan;

@@ -5,7 +5,7 @@ use v5.10.0;
 use strict;
 use warnings;
 
-use version 0.77; our $VERSION = version->declare('v0.5.0');
+use version 0.77; our $VERSION = version->declare('v0.5.1');
 
 use Carp qw/ croak /;
 use List::MoreUtils qw/ natatime /;
@@ -121,6 +121,8 @@ fail).
 
 None of the C<$rules> can match.
 
+=for readme stop
+
 =item C<-and>
 
 This is a (deprecated) synonym for C<-all>.
@@ -128,6 +130,13 @@ This is a (deprecated) synonym for C<-all>.
 =item C<-or>
 
 This is a (deprecated) synonym for C<-any>.
+
+=item C<-not>
+
+This is a (deprecated) synonym for C<-notall> and C<-notany>,
+depending on the context.
+
+=for readme continue
 
 =back
 
@@ -148,6 +157,8 @@ or
        -any => [ ... ],
     ],
   }
+
+=for readme stop
 
 The values for special keys can be either a hash or array
 reference. But note that hash references only allow strings as keys,
@@ -176,6 +187,8 @@ You can also use functions to match keys. For example,
   -or => [
     sub { $_[0] > 10 } => $rule,
   ]
+
+=for readme continue
 
 =cut
 
@@ -320,6 +333,14 @@ sub _compile_rule {
 =head1 AUTHOR
 
 Robert Rothenberg, C<< <rrwo at cpan.org> >>
+
+=head1 ACKNOWLEDGEMENTS
+
+=over
+
+=item Foxtons, Ltd.
+
+=back
 
 =head1 LICENSE AND COPYRIGHT
 

@@ -1,5 +1,11 @@
 Revision history for Hash::Match
 
+v0.5.1  2014-06-30
+
+        - Added missing prereq.
+
+	- Minor updates to POD and README.
+
 v0.5.0  2014-06-28
 
 	- Further code simplication.

@@ -85,12 +85,6 @@ METHODS
 
         None of the `$rules' can match.
 
-    `-and'
-        This is a (deprecated) synonym for `-all'.
-
-    `-or'
-        This is a (deprecated) synonym for `-any'.
-
     Note that rules can be specified arbitrarily deep, e.g.
 
       {
@@ -109,36 +103,11 @@ METHODS
         ],
       }
 
-    The values for special keys can be either a hash or array reference. But
-    note that hash references only allow strings as keys, and that keys must
-    be unique.
-
-    You can use regular expressions for matching keys. For example,
-
-      -any => [
-        qr/xyz/ => $rule,
-      ]
-
-    will match if there is any key that matches the regular expression has a
-    corresponding value which matches the `$rule'.
-
-    You can also use
-
-      -and => [
-        qr/xyz/ => $rule,
-      ]
-
-    to match if all keys that match the regular expression have
-    corresponding values which match the `$rule'.
-
-    You can also use functions to match keys. For example,
-
-      -or => [
-        sub { $_[0] > 10 } => $rule,
-      ]
-
 AUTHOR
     Robert Rothenberg, `<rrwo at cpan.org>'
+
+ACKNOWLEDGEMENTS
+    Foxtons, Ltd.
 
 LICENSE AND COPYRIGHT
     Copyright 2014 Robert Rothenberg.
