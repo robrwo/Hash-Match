@@ -33,7 +33,8 @@ requires (
 );
 
 test_requires (
-    'Test::More'           => 0,
+    'Test::More'      => 0.98,
+    'Test::Exception' => 0,
 );
 
 install_as_cpan;
