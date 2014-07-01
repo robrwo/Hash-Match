@@ -5,7 +5,7 @@ use v5.10.0;
 use strict;
 use warnings;
 
-use version 0.77; our $VERSION = version->declare('v0.5.1');
+use version 0.77; our $VERSION = version->declare('v0.5.2');
 
 use Carp qw/ croak /;
 use List::MoreUtils qw/ natatime /;
@@ -175,7 +175,7 @@ a corresponding value which matches the C<$rule>.
 
 You can also use
 
-  -and => [
+  -all => [
     qr/xyz/ => $rule,
   ]
 
@@ -184,7 +184,7 @@ corresponding values which match the C<$rule>.
 
 You can also use functions to match keys. For example,
 
-  -or => [
+  -any => [
     sub { $_[0] > 10 } => $rule,
   ]
 
@@ -387,4 +387,3 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 =for readme continue
 
 =cut
-
