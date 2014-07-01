@@ -5,7 +5,7 @@ use v5.10.0;
 use strict;
 use warnings;
 
-use version 0.77; our $VERSION = version->declare('v0.5.1');
+use version 0.77; our $VERSION = version->declare('v0.5.2');
 
 use Carp qw/ croak /;
 use List::MoreUtils qw/ natatime /;
@@ -387,4 +387,3 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 =for readme continue
 
 =cut
-
