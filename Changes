@@ -1,6 +1,6 @@
 Revision history for Hash::Match
 
-v0.5.2
+v0.5.2  2014-07-01
 
         - Changed POD to not use deprecated keywords in the examples.
 
