@@ -330,6 +330,18 @@ sub _compile_rule {
 
 1;
 
+=head1 SEE ALSO
+
+The following modules have similar functionality:
+
+=over
+
+=item L<Data::Match>
+
+=item L<Data::Search>
+
+=back
+
 =head1 AUTHOR
 
 Robert Rothenberg, C<< <rrwo at cpan.org> >>
