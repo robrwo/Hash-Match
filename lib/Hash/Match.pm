@@ -5,7 +5,7 @@ use v5.10.0;
 use strict;
 use warnings;
 
-use version 0.77; our $VERSION = version->declare('v0.5.2');
+use version 0.77; our $VERSION = version->declare('v0.5.3');
 
 use Carp qw/ croak /;
 use List::MoreUtils qw/ natatime /;
@@ -329,6 +329,18 @@ sub _compile_rule {
 }
 
 1;
+
+=head1 SEE ALSO
+
+The following modules have similar functionality:
+
+=over
+
+=item L<Data::Match>
+
+=item L<Data::Search>
+
+=back
 
 =head1 AUTHOR
 
