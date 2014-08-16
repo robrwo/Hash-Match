@@ -4,7 +4,7 @@ use inc::Module::Install;
 
 name     'Hash-Match';
 all_from 'lib/Hash/Match.pm';
-license  'artistic2';
+license  'artistic_2';
 
 perl_version 5.010;
 
