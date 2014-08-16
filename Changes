@@ -4,6 +4,8 @@ v0.5.3
 
         - Added SEE ALSO section to the POD.
 
+	- Fixed license setting to make CPANTS happy.
+
 v0.5.2  2014-07-01
 
         - Changed POD to not use deprecated keywords in the examples.
