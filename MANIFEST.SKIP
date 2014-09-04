@@ -17,3 +17,10 @@ Hash-Match-v\d+\.\d+\.\d+/
 
 ^xt/
 
+# Travis-CI
+
+\.travis\.yml
+
+# Distzilla etc
+
+\.build/
