@@ -5,7 +5,7 @@ use v5.10.0;
 use strict;
 use warnings;
 
-use version 0.77; our $VERSION = version->declare('v0.5.4');
+our $VERSION = '0.5.4';
 
 use Carp qw/ croak /;
 use List::AllUtils qw/ natatime /;

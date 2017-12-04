@@ -29,7 +29,6 @@ requires (
     'Carp'                 => 0,
     'List::AllUtils'       => 0,
     'namespace::autoclean' => 0,
-    'version'              => 0.77,
 );
 
 test_requires (
