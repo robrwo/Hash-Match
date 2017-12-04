@@ -1,5 +1,7 @@
 Revision history for Hash::Match
 
+        - Switch to use List::AllUtils
+
 v0.5.3  2014-08-16
 
         - Added SEE ALSO section to the POD.

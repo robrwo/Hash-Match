@@ -27,7 +27,7 @@ build_requires (
 
 requires (
     'Carp'                 => 0,
-    'List::MoreUtils'      => 0.07,
+    'List::AllUtils'       => 0,
     'namespace::autoclean' => 0,
     'version'              => 0.77,
 );
