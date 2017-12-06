@@ -1,11 +1,10 @@
 Revision history for Hash::Match
 
-{{$NEXT}}
+v0.6.1    2017-12-06 08:03:04+00:00 Europe/London
 
         - Added missing prereqs (Mohammad S Anwar)
 
         - Updated Copyright year in POD
-
 
 v0.6.0    2017-12-04 17:27:59+00:00 Europe/London
 
