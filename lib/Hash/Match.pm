@@ -346,6 +346,10 @@ The following modules have similar functionality:
 
 Robert Rothenberg, C<< <rrwo at cpan.org> >>
 
+=head2 Contributors
+
+Mohammad S Anwar
+
 =head1 ACKNOWLEDGEMENTS
 
 =over
