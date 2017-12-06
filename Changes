@@ -1,6 +1,12 @@
 Revision history for Hash::Match
 
 {{$NEXT}}
+
+        - Added missing prereqs (Mohammad S Anwar)
+
+
+v0.6.0    2017-12-04 17:27:59+00:00 Europe/London
+
         - Switch to use List::AllUtils
 
         - Removed use of Const::Fast from xt/pod-spelling.t.
