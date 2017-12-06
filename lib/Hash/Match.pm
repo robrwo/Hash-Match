@@ -360,7 +360,7 @@ Mohammad S Anwar
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2014 Robert Rothenberg.
+Copyright 2017 Robert Rothenberg.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the the Artistic License (2.0). You may obtain a

@@ -4,6 +4,8 @@ Revision history for Hash::Match
 
         - Added missing prereqs (Mohammad S Anwar)
 
+        - Updated Copyright year in POD
+
 
 v0.6.0    2017-12-04 17:27:59+00:00 Europe/London
 
