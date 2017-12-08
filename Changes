@@ -1,6 +1,6 @@
 Revision history for Hash::Match
 
-{{$NEXT}}
+v0.6.2    2017-12-08 08:49:54+00:00 Europe/London
 
         - Added missing test prereqs.
 
