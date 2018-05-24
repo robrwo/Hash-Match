@@ -1,37 +1,18 @@
 package Hash::Match;
 
+# ABSTRACT: match contents of a hash against rules
+
 use v5.10.0;
 
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare('v0.6.2');
+our $VERSION = 'v0.7.0';
 
 use Carp qw/ croak /;
 use List::AllUtils qw/ natatime /;
 
 use namespace::autoclean;
-
-=head1 NAME
-
-Hash::Match - match contents of a hash against rules
-
-=begin readme
-
-=head1 REQUIREMENTS
-
-This module requires Perl v5.10 or newer, and the following non-core
-modules:
-
-=over
-
-=item L<List::AllUtils>
-
-=item L<namespace::autoclean>
-
-=back
-
-=end readme
 
 =head1 SYNOPSIS
 
@@ -56,9 +37,7 @@ modules:
 This module allows you to specify complex matching rules for the
 contents of a hash.
 
-=head1 METHODS
-
-=head2 C<new>
+=method C<new>
 
   my $m = Hash::Match->new( rules => $rules );
 
@@ -121,8 +100,6 @@ fail).
 
 None of the C<$rules> can match.
 
-=for readme stop
-
 =item C<-and>
 
 This is a (deprecated) synonym for C<-all>.
@@ -135,8 +112,6 @@ This is a (deprecated) synonym for C<-any>.
 
 This is a (deprecated) synonym for C<-notall> and C<-notany>,
 depending on the context.
-
-=for readme continue
 
 =back
 
@@ -157,8 +132,6 @@ or
        -any => [ ... ],
     ],
   }
-
-=for readme stop
 
 The values for special keys can be either a hash or array
 reference. But note that hash references only allow strings as keys,
@@ -187,8 +160,6 @@ You can also use functions to match keys. For example,
   -any => [
     sub { $_[0] > 10 } => $rule,
   ]
-
-=for readme continue
 
 =cut
 
@@ -342,64 +313,9 @@ The following modules have similar functionality:
 
 =back
 
-=head1 AUTHOR
+=head1 append:AUTHOR
 
-Robert Rothenberg, C<< <rrwo at cpan.org> >>
-
-=head2 Contributors
-
-Mohammad S Anwar
-
-=head1 ACKNOWLEDGEMENTS
-
-=over
-
-=item Foxtons, Ltd.
-
-=back
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright 2017 Robert Rothenberg.
-
-This program is free software; you can redistribute it and/or modify it
-under the terms of the the Artistic License (2.0). You may obtain a
-copy of the full license at:
-
-L<http://www.perlfoundation.org/artistic_license_2_0>
-
-=for readme stop
-
-Any use, modification, and distribution of the Standard or Modified
-Versions is governed by this Artistic License. By using, modifying or
-distributing the Package, you accept this license. Do not use, modify,
-or distribute the Package, if you do not accept this license.
-
-If your Modified Version has been derived from a Modified Version made
-by someone other than you, you are nevertheless required to ensure that
-your Modified Version complies with the requirements of this license.
-
-This license does not grant you the right to use any trademark, service
-mark, tradename, or logo of the Copyright Holder.
-
-This license includes the non-exclusive, worldwide, free-of-charge
-patent license to make, have made, use, offer to sell, sell, import and
-otherwise transfer the Package with respect to any patent claims
-licensable by the Copyright Holder that are necessarily infringed by the
-Package. If you institute patent litigation (including a cross-claim or
-counterclaim) against any party alleging that the Package constitutes
-direct or contributory patent infringement, then this Artistic License
-to you shall terminate on the date that such litigation is filed.
-
-Disclaimer of Warranty: THE PACKAGE IS PROVIDED BY THE COPYRIGHT HOLDER
-AND CONTRIBUTORS "AS IS' AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES.
-THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-PURPOSE, OR NON-INFRINGEMENT ARE DISCLAIMED TO THE EXTENT PERMITTED BY
-YOUR LOCAL LAW. UNLESS REQUIRED BY LAW, NO COPYRIGHT HOLDER OR
-CONTRIBUTOR WILL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, OR
-CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THE PACKAGE,
-EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-=for readme continue
+Some development of this module was based on work for
+Foxtons L<http://www.foxtons.co.uk>.
 
 =cut
