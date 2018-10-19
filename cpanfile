@@ -1,6 +1,8 @@
 requires "List::AllUtils" => "0";
+requires "Ref::Util" => "0";
 requires "namespace::autoclean" => "0";
 requires "perl" => "v5.10.0";
+recommends "Ref::Util::XS" => "0";
 
 on 'test' => sub {
   requires "File::Spec" => "0";

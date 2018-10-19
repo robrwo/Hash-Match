@@ -11,6 +11,9 @@ our $VERSION = 'v0.7.0';
 
 use Carp qw/ croak /;
 use List::AllUtils qw/ natatime /;
+use Ref::Util qw/ is_coderef is_hashref is_ref is_regexpref /;
+
+# RECOMMEND PREREQ: Ref::Util::XS
 
 use namespace::autoclean;
 
@@ -168,8 +171,8 @@ sub new {
 
     if (my $rules = $args{rules}) {
 
-        my $root = ((ref $rules) eq 'HASH') ? '-all' : '-any';
-        my $self = _compile_rule( $root => $args{rules}, $class );
+        my $root = is_hashref($rules) ? '-all' : '-any';
+        my $self = _compile_rule( $root => $rules, $class );
         bless $self, $class;
 
     } else {
@@ -182,13 +185,13 @@ sub new {
 sub _compile_match {
     my ($value) = @_;
 
-    if ( my $match_ref = ( ref $value ) ) {
+    if ( is_ref($value) ) {
 
-        return sub { ($_[0] // '') =~ $value } if ( $match_ref eq 'Regexp' );
+        return sub { ($_[0] // '') =~ $value } if is_regexpref($value);
 
-        return sub { $value->($_[0]) } if ( $match_ref eq 'CODE' );
+        return sub { $value->($_[0]) } if is_coderef($value);
 
-        croak "Unsupported type: '${match_ref}'";
+        croak sprintf('Unsupported type: \'%s\'', ref $value);
 
     } else {
 
@@ -227,7 +230,7 @@ sub _compile_rule {
 
     if ( my $key_ref = ( ref $key ) ) {
 
-        if ( $key_ref eq 'Regexp' ) {
+        if (is_regexpref($key)) {
 
             my $match = _compile_match($value);
 
@@ -239,7 +242,7 @@ sub _compile_rule {
                        grep { $_ =~ $key } (keys %{$hash}) );
             };
 
-        } elsif ( $key_ref eq 'CODE' ) {
+        } elsif (is_coderef($key)) {
 
             my $match = _compile_match($value);
 
