@@ -1,6 +1,8 @@
 Revision history for Hash::Match
 
 {{$NEXT}}
+
+v0.7.0    2018-10-19 17:16:55+01:00 Europe/London
   [Enhancements]
   - Uses Ref::Util for improved performance.
 
