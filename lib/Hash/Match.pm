@@ -13,6 +13,7 @@ use Carp qw/ croak /;
 use List::AllUtils qw/ natatime /;
 use Ref::Util qw/ is_coderef is_hashref is_ref is_regexpref /;
 
+# RECOMMEND PREREQ: List::SomeUtils::XS
 # RECOMMEND PREREQ: Ref::Util::XS
 
 use namespace::autoclean;

@@ -1,6 +1,9 @@
 Revision history for Hash::Match
 
 {{$NEXT}}
+  [Other]
+  - Add List::SomeUtils::XS to recommended prereqs.
+
   [Toolchain]
   - Removed use of Travis-CI.
 
