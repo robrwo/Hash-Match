@@ -102,7 +102,7 @@ You can specify more complex rules using special key names:
 
     ```perl
     {
-      -any => $rules,
+      -notany => $rules,
     }
     ```
 

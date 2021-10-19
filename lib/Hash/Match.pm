@@ -99,7 +99,7 @@ fail).
 =item C<-notany>
 
   {
-    -any => $rules,
+    -notany => $rules,
   }
 
 None of the C<$rules> can match.
