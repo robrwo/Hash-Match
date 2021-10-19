@@ -1,6 +1,8 @@
 Revision history for Hash::Match
 
 {{$NEXT}}
+  [Documentation]
+  - Fixed copyright year.
 
 v0.7.1    2021-10-19 16:57:52+01:00 Europe/London
   [Documentation]
