@@ -6,6 +6,8 @@ Revision history for Hash::Match
 
   - Improved code encapsulation.
 
+  - Cleaned up unnecessary code.
+
   [Documentation]
   - Updated copyright year.
 

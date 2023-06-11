@@ -262,8 +262,6 @@ sub _compile_rule {
 
     } else {
 
-        my $match_ref = ref $value;
-
         if ( !is_blessed_ref($value) && ( is_arrayref($value) || is_hashref($value) ) ) {
 
             my $it = is_arrayref($value)
