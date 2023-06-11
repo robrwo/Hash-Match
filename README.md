@@ -181,8 +181,8 @@ You can also use functions to match keys. For example,
 
 The following modules have similar functionality:
 
-- [Data::Match](https://metacpan.org/pod/Data::Match)
-- [Data::Search](https://metacpan.org/pod/Data::Search)
+- [Data::Match](https://metacpan.org/pod/Data%3A%3AMatch)
+- [Data::Search](https://metacpan.org/pod/Data%3A%3ASearch)
 
 # SOURCE
 
