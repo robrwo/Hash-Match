@@ -11,7 +11,7 @@ our $VERSION = 'v0.7.3';
 
 use Carp qw/ croak /;
 use List::AllUtils qw/ natatime /;
-use Ref::Util qw/ is_coderef is_hashref is_ref is_regexpref /;
+use Ref::Util qw/ is_arrayref is_blessed_ref is_coderef is_hashref is_ref is_regexpref /;
 
 # RECOMMEND PREREQ: List::SomeUtils::XS
 # RECOMMEND PREREQ: Ref::Util::XS
@@ -213,14 +213,13 @@ my %KEY2FN = (
 );
 
 sub _key2fn {
-    my ($key, $ctx) = @_;
+    my ($key, $is_hash) = @_;
 
     # TODO: eventually add a warning message about -not being
     # deprecated.
 
     if ($key eq '-not') {
-	$ctx //= '';
-	$key = ($ctx eq 'HASH') ? '-notall' : '-notany';
+	$key = $is_hash ? '-notall' : '-notany';
     }
 
     $KEY2FN{$key} or croak "Unsupported key: '${key}'";
@@ -229,7 +228,7 @@ sub _key2fn {
 sub _compile_rule {
     my ( $key, $value, $ctx ) = @_;
 
-    if ( my $key_ref = ( ref $key ) ) {
+    if ( is_ref($key) ) {
 
         if (is_regexpref($key)) {
 
@@ -257,7 +256,7 @@ sub _compile_rule {
 
         } else {
 
-            croak "Unsupported key type: '${key_ref}'";
+            croak sprintf( "Unsupported key type: '\%s'", ref $key );
 
         }
 
@@ -265,25 +264,25 @@ sub _compile_rule {
 
         my $match_ref = ref $value;
 
-	if ( $match_ref =~ /^(?:ARRAY|HASH)$/ ) {
+        if ( !is_blessed_ref($value) && ( is_arrayref($value) || is_hashref($value) ) ) {
 
-            my $it = ( $match_ref eq 'ARRAY' )
-		? natatime 2, @{$value}
-	        : sub { each %{$value} };
+            my $it = is_arrayref($value)
+                ? natatime 2, @{$value}
+                : sub { each %{$value} };
 
             my @codes;
             while ( my ( $k, $v ) = $it->() ) {
                 push @codes, _compile_rule( $k, $v, $key );
             }
 
-            my $fn = _key2fn($key, $match_ref);
+            my $fn = _key2fn($key, is_hashref($value));
 
             return sub {
                 my $hash = $_[0];
                 $fn->( sub { $_->($hash) }, @codes );
             };
 
-        } elsif ( $match_ref =~ /^(?:Regexp|CODE|)$/ ) {
+        } elsif ( is_coderef($value) || is_regexpref($value) || !is_ref($value) ) {
 
             my $match = _compile_match($value);
 
@@ -294,7 +293,7 @@ sub _compile_rule {
 
         } else {
 
-            croak "Unsupported type: '${match_ref}'";
+            croak sprintf( "Unsupported type: '\%s'", ref $value );
 
         }
 
