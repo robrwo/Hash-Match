@@ -203,17 +203,17 @@ sub _compile_match {
     }
 }
 
-my %KEY2FN = (
-    '-all'	=> List::AllUtils->can('all'),
-    '-and'	=> List::AllUtils->can('all'),
-    '-any'	=> List::AllUtils->can('any'),
-    '-notall'	=> List::AllUtils->can('notall'),
-    '-notany'	=> List::AllUtils->can('none'),
-    '-or'	=> List::AllUtils->can('any'),
-);
-
 sub _key2fn {
     my ($key, $is_hash) = @_;
+
+    state $KEY2FN = {
+        '-all'    => List::AllUtils->can('all'),
+        '-and'    => List::AllUtils->can('all'),
+        '-any'    => List::AllUtils->can('any'),
+        '-notall' => List::AllUtils->can('notall'),
+        '-notany' => List::AllUtils->can('none'),
+        '-or'     => List::AllUtils->can('any'),
+    };
 
     # TODO: eventually add a warning message about -not being
     # deprecated.
@@ -222,7 +222,7 @@ sub _key2fn {
 	$key = $is_hash ? '-notall' : '-notany';
     }
 
-    $KEY2FN{$key} or croak "Unsupported key: '${key}'";
+    $KEY2FN->{$key} or croak "Unsupported key: '${key}'";
 }
 
 sub _compile_rule {

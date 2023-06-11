@@ -4,6 +4,8 @@ Revision history for Hash::Match
   [Enhancements]
   - Uses Ref::Util for my reference type checks.
 
+  - Improved code encapsulation.
+
   [Documentation]
   - Updated copyright year.
 
