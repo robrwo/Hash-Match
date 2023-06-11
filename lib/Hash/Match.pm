@@ -5,7 +5,7 @@ package Hash::Match;
 use v5.14;
 use warnings;
 
-our $VERSION = 'v0.8.0';
+our $VERSION = 'v0.8.1';
 
 use Carp qw/ croak /;
 use List::AllUtils qw/ natatime /;

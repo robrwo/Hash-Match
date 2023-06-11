@@ -4,7 +4,7 @@ Hash::Match - match contents of a hash against rules
 
 # VERSION
 
-version v0.8.0
+version v0.8.1
 
 # SYNOPSIS
 
