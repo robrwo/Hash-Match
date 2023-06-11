@@ -12,6 +12,8 @@ Revision history for Hash::Match
   - Cleaned up unnecessary code.
 
   [Documentation]
+  - Document perl version support policy.
+
   - Updated copyright year.
 
   - Fixed encoding of links in README.

@@ -177,6 +177,12 @@ You can also use functions to match keys. For example,
 ]
 ```
 
+# SUPPORT FOR OLDER PERL VERSIONS
+
+Since v0.8.0, the this module requires Perl v5.14 or later.
+
+Future releases may only support Perl versions released in the last ten years.
+
 # SEE ALSO
 
 The following modules have similar functionality:
