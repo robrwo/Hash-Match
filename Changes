@@ -1,6 +1,9 @@
 Revision history for Hash::Match
 
 {{$NEXT}}
+  [Incompatible Changes]
+  - Perl v5.14 or later is now required.
+
   [Enhancements]
   - Uses Ref::Util for my reference type checks.
 

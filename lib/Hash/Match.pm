@@ -2,9 +2,7 @@ package Hash::Match;
 
 # ABSTRACT: match contents of a hash against rules
 
-use v5.10.0;
-
-use strict;
+use v5.14;
 use warnings;
 
 our $VERSION = 'v0.7.3';

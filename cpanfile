@@ -4,7 +4,7 @@
 requires "List::AllUtils" => "0";
 requires "Ref::Util" => "0";
 requires "namespace::autoclean" => "0";
-requires "perl" => "v5.10.0";
+requires "perl" => "v5.14.0";
 recommends "List::SomeUtils::XS" => "0";
 recommends "Ref::Util::XS" => "0";
 
