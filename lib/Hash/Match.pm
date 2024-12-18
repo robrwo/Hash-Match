@@ -323,4 +323,11 @@ The following modules have similar functionality:
 Some development of this module was based on work for
 Foxtons L<http://www.foxtons.co.uk>.
 
+=head1 append:BUGS
+
+=head2 Reporting Security Vulnerabilities
+
+Security issues should not be reported on the bugtracker website.  Please see F<SECURITY.md> for instructions how to
+report security vulnerabilities
+
 =cut
