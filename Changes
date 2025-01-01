@@ -1,6 +1,8 @@
 Revision history for Hash::Match
 
 {{$NEXT}}
+  [Documentation]
+  - Updated link to the security policy to refer to the git repo.
 
 v0.8.1    2025-01-01 12:58:38+00:00 Europe/London
   [Documentation]
