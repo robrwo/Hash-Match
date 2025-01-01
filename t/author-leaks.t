@@ -1,4 +1,13 @@
-use Test::More;
+use v5.14;
+
+use constant HAS_LEAKTRACE => eval{ require Test::LeakTrace };
+
+use Test::More HAS_LEAKTRACE ? (tests => 17) : (skip_all => 'require Test::LeakTrace');
+
+unless ( $ENV{AUTHOR_TESTING} ) {
+    plan( skip_all => "Author tests not required for installation" );
+}
+
 use Test::LeakTrace;
 
 use Hash::Match;

@@ -7,12 +7,11 @@ use Test::More;
 
 use English qw( -no_match_vars );
 
-my $DICTIONARY = 'xt/etc/custom-dictionary.txt';
+my $DICTIONARY = 't/etc/custom-dictionary.txt';
 
-unless ( $ENV{RELEASE_TESTING} ) {
+unless ( $ENV{AUTHOR_TESTING} ) {
     plan( skip_all => "Author tests not required for installation" );
 }
-
 
 eval "use File::Slurp";
 plan skip_all => 'File::Slurp required' if $@;
