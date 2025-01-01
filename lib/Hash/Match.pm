@@ -217,7 +217,7 @@ sub _key2fn {
     # deprecated.
 
     if ($key eq '-not') {
-	$key = $is_hash ? '-notall' : '-notany';
+        $key = $is_hash ? '-notall' : '-notany';
     }
 
     $KEY2FN->{$key} or croak "Unsupported key: '${key}'";
