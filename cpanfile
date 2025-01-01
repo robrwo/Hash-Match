@@ -33,6 +33,7 @@ on 'configure' => sub {
 };
 
 on 'develop' => sub {
+  requires "English" => "0";
   requires "Pod::Coverage::TrustPod" => "0";
   requires "Test::CVE" => "0.08";
   requires "Test::CleanNamespaces" => "0.15";
@@ -40,6 +41,7 @@ on 'develop' => sub {
   requires "Test::EOF" => "0";
   requires "Test::EOL" => "0";
   requires "Test::Kwalitee" => "1.21";
+  requires "Test::LeakTrace" => "0";
   requires "Test::MinimumVersion" => "0";
   requires "Test::More" => "0.88";
   requires "Test::NoTabs" => "0";
@@ -49,4 +51,5 @@ on 'develop' => sub {
   requires "Test::Pod::LinkCheck" => "0";
   requires "Test::Portability::Files" => "0";
   requires "Test::TrailingSpace" => "0.0203";
+  requires "strict" => "0";
 };
