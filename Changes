@@ -4,6 +4,8 @@ Revision history for Hash::Match
   [Documentation]
   - Updated link to the security policy to refer to the git repo.
 
+  - Fixed copyright year.
+
 v0.8.1    2025-01-01 12:58:38+00:00 Europe/London
   [Documentation]
   - Added a security policy.
