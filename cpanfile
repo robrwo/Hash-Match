@@ -8,9 +8,14 @@ requires "perl" => "v5.14.0";
 recommends "List::SomeUtils::XS" => "0";
 recommends "Ref::Util::XS" => "0";
 
+on 'build' => sub {
+  requires "ExtUtils::MakeMaker" => "7.22";
+  requires "Module::Metadata" => "1.000015";
+};
+
 on 'test' => sub {
   requires "File::Spec" => "0";
-  requires "Module::Metadata" => "0";
+  requires "Module::Metadata" => "1.000015";
   requires "Test::Exception" => "0";
   requires "Test::More" => "0.98";
   requires "if" => "0";
@@ -26,6 +31,7 @@ on 'configure' => sub {
 
 on 'develop' => sub {
   requires "Pod::Coverage::TrustPod" => "0";
+  requires "Test::CVE" => "0.08";
   requires "Test::CleanNamespaces" => "0.15";
   requires "Test::DistManifest" => "0";
   requires "Test::EOF" => "0";
