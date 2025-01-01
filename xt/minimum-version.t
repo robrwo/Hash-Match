@@ -6,4 +6,4 @@ unless ( $ENV{RELEASE_TESTING} ) {
 }
 
 use Test::MinimumVersion;
-all_minimum_version_ok('v5.10.0');
+all_minimum_version_ok('v5.14.0');

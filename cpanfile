@@ -35,6 +35,7 @@ on 'configure' => sub {
 on 'develop' => sub {
   requires "English" => "0";
   requires "Pod::Coverage::TrustPod" => "0";
+  requires "Test2::V0" => "0";
   requires "Test::CVE" => "0.08";
   requires "Test::CleanNamespaces" => "0.15";
   requires "Test::DistManifest" => "0";
