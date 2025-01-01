@@ -9,7 +9,7 @@ Revision history for Hash::Match
   [Tests]
   - Added and improved author tests.
 
-  [Other]
+  [Toolchain]
   - Added .mailmap to repo.
 
   - Declared core prereqs.
