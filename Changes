@@ -14,6 +14,8 @@ Revision history for Hash::Match
 
   - Declared core prereqs.
 
+  - Added signature to release.
+
 v0.8.0    2023-06-11 14:49:27+01:00 Europe/London
   [Incompatible Changes]
   - Perl v5.14 or later is now required.
