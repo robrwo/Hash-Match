@@ -6,6 +6,9 @@ Revision history for Hash::Match
 
   - Fixed copyright year.
 
+  [Tests]
+  - Fixed an error with t/author-leaks.t GH#8.
+
 v0.8.1    2025-01-01 12:58:38+00:00 Europe/London
   [Documentation]
   - Added a security policy.
